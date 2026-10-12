@@ -1,5 +1,12 @@
-.terraform/
-*.tfstate
-*.tfstate.backup
-.terraform.lock.hcl
-*.zip
+# Ignore all .terraform folders anywhere in the project
+**/.terraform/
+
+# Ignore all state files anywhere in the project
+**/*.tfstate
+**/*.tfstate.backup
+
+# Ignore all lock files anywhere in the project
+**/.terraform.lock.hcl
+
+# Ignore all zip files anywhere in the project
+**/*.zip
