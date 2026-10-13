@@ -9,7 +9,7 @@ def lambda_handler(content,event):
             'Content-Type' : 'application/json',
             'Access-Control-Allow-Origin' : '*'
         },
-        'body': jsondumps({
+        'body': json.dumps({
             'status':'success',
             'message': 'Hello From your serverless AWS LAMBDA Backend'
         })
