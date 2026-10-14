@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhammad Jamal Khan Cloud Profile Baseline</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .card {
+            background-color: #1e293b;
+            border-radius: 8px;
+            padding: 30px;
+            display: inline-block;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            color: #38bdf8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>Muhammad Jamal</h1>
+        <p>AWS Solutions Architect & Infrastructure as Code Engineer</p>
+        <p id="trater-status">Registering visitor session...</p>
+    </div>
+    <script>
+        // REPLACE THE MOCK ENDPOINT URL WITH YOUR LIVE OUTPUT API ENDPOINT URL LATER!
+        const apiEnpoint = "YOUR_API_GATEWAY_URL_HERE"
+
+        if (apiEnpoint !== "YOUR_API_GATEWAY_URL_HERE") {
+            fetch(apiEnpoint)
+                .then(respone => respone.json())
+                .then(data => {
+                    document.getElementById("traker-status").innerText = "Visitor transaction tracked asynchronously via serverless backend!";
+                })
+                .catch(error => {
+                    document.getElementById("tracker-status").innerText = "Connection tracking Bypass active.";
+                    colse.error("Error:", error);
+                });
+        } else {
+            document.getElementById("tracker-status").innerText = "Local Validation Active (Waiting for API Gateway sting Binding).";
+        }
+    </script>
+</body>
+
+</html>
