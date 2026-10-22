@@ -1,4 +1,3 @@
-from requests import status_codes
 import json
 import os
 

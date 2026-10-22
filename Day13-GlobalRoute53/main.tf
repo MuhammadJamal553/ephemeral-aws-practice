@@ -25,7 +25,7 @@ provider "aws" {
 data "archive_file" "lambda_zip" {
     type        = "zip"
     source_file = "lambda_function.py"
-    output_path = "lambda_funtion.zip"
+    output_path = "lambda_function.zip"
 }
 
 # ========================================================
@@ -77,7 +77,7 @@ resource "aws_apigatewayv2_route" "primary_route" {
 }
 resource "aws_apigatewayv2_stage" "primary_stage" {
     api_id      = aws_apigatewayv2_api.primary_api.id
-    name        = "default"
+    name        = "$default"
     auto_deploy = true
 }
 
@@ -118,7 +118,7 @@ resource "aws_apigatewayv2_integration" "secondary_link" {
     integration_uri = aws_lambda_function.secondary_lambda.arn
 }
 
-resource "aws_apigatewayv2_route" "seocondary_rout" {
+resource "aws_apigatewayv2_route" "seocondary_route" {
     provider        = aws.west_coast
     api_id          = aws_apigatewayv2_api.secondary_api.id
     route_key       = "ANY /"
@@ -145,12 +145,12 @@ resource "aws_lambda_permission" "allow_secondary_api" {
 # 3. MONITORING VERIFICATION ENDPOINT OUTPUTS
 # ========================================================
 
-output "primary_east_cost_endpoint" {
+output "primary_east_coast_endpoint" {
     value       = aws_apigatewayv2_stage.primary_stage.invoke_url
     description = "The Direct address to hit your US-East-1 Configuration Infrastructure"
 }
 
-output "secondary_west_cost_endpoint" {
+output "secondary_west_coast_endpoint" {
     value       = aws_apigatewayv2_stage.secondary_stage.invoke_url
     description = "The Direct address to hit your US-west-2 Configuration Infrastructure"
 }
