@@ -63,7 +63,7 @@ resource "aws_wafv2_web_acl" "edge_waf" {
 
 resource "aws_s3_bucket" "secure_origin" {
     # lower() forces lowercase, replace() strips out accidental double hyphens
-    bucket          = "jamal-secure-waf-origin-${var.project_name}-5546"  # Replace xxxx with unique numbers!
+    bucket          = "jamal-secure-waf-origin-${var.project_name}-xxxx"  # Replace xxxx with unique numbers!
     force_destroy   = true
 }
 
