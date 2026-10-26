@@ -10,5 +10,5 @@ variable "secondary_region" {
 
 variable "project_name" {
     type    = string
-    default = "jamla-khan-marathon-day13"
+    default = "jamal-khan-marathon-day13"
 }
