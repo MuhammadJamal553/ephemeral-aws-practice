@@ -80,7 +80,8 @@ resource "aws_iam_role_policy" "replication_policy" {
         Action = [
           "s3:GetObjectVersionForReplication",
           "s3:GetObjectVersionAcl",
-          "s3:GetObjectVersionTagging"
+          "s3:GetObjectVersionTagging",
+          "s3:GetObjectRetention" # 👈(Allows reading lock status from source)
         ]
         Resource = "${aws_s3_bucket.source_bucket.arn}/*"
       },
@@ -89,7 +90,8 @@ resource "aws_iam_role_policy" "replication_policy" {
         Action = [
           "s3:ReplicateObject",
           "s3:ReplicateDelete",
-          "s3:ReplicateTags"
+          "s3:ReplicateTags",
+          "s3:ReplicateObjectLock" # 👈(Allows writing lock status to replica)
         ]
         Resource = "${aws_s3_bucket.replica_bucket.arn}/*"
       }
