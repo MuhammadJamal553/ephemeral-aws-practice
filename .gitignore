@@ -3,10 +3,20 @@
 
 # Ignore all state files anywhere in the project
 **/*.tfstate
-**/*.tfstate.backup
+**/*.tfstate.*
 
 # Ignore all lock files anywhere in the project
 **/.terraform.lock.hcl
 
 # Ignore all zip files anywhere in the project
 **/*.zip
+
+# Ignore variable files (can hold secrets or passwords)
+**/*.tfvars
+
+# Ignore Terraform crash logs and saved plans
+**/crash.log
+**/tfplan
+
+# Ignore temp file from the Day 20 ping test
+**/params.json
