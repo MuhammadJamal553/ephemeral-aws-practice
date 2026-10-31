@@ -1,0 +1,225 @@
+{
+  "version": 4,
+  "terraform_version": "1.15.8",
+  "serial": 20,
+  "lineage": "e32bb570-b2bc-7fcb-7ffd-65492bcaf15a",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "data",
+      "type": "aws_caller_identity",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "account_id": "492646066628",
+            "arn": "arn:aws:iam::492646066628:user/Jimmykhan",
+            "id": "492646066628",
+            "user_id": "AIDAXFM76NHCGFNNL6PRP"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "replica_bucket",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"].replica_zone",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::jamal-compliance-replica-492646066628",
+            "bucket": "jamal-compliance-replica-492646066628",
+            "bucket_domain_name": "jamal-compliance-replica-492646066628.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "jamal-compliance-replica-492646066628.s3.us-east-2.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "e0b4aaa4a2bf21f5166fac65b47669e24e217d41b920a844c6c84d0c2f7028d6",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z2O1EMRO9K5GLX",
+            "id": "jamal-compliance-replica-492646066628",
+            "lifecycle_rule": [],
+            "logging": [],
+            "object_lock_configuration": [
+              {
+                "object_lock_enabled": "Enabled",
+                "rule": []
+              }
+            ],
+            "object_lock_enabled": true,
+            "policy": "",
+            "region": "us-east-2",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "",
+                        "sse_algorithm": "AES256"
+                      }
+                    ],
+                    "bucket_key_enabled": false
+                  }
+                ]
+              }
+            ],
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "source_bucket",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::jamal-compliance-source-492646066628",
+            "bucket": "jamal-compliance-source-492646066628",
+            "bucket_domain_name": "jamal-compliance-source-492646066628.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "jamal-compliance-source-492646066628.s3.us-east-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "e0b4aaa4a2bf21f5166fac65b47669e24e217d41b920a844c6c84d0c2f7028d6",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+            "id": "jamal-compliance-source-492646066628",
+            "lifecycle_rule": [],
+            "logging": [],
+            "object_lock_configuration": [
+              {
+                "object_lock_enabled": "Enabled",
+                "rule": [
+                  {
+                    "default_retention": [
+                      {
+                        "days": 1,
+                        "mode": "COMPLIANCE",
+                        "years": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "object_lock_enabled": true,
+            "policy": "",
+            "region": "us-east-1",
+            "replication_configuration": [
+              {
+                "role": "arn:aws:iam::492646066628:role/jamal-khan-marathon-day19-s3-crr-role",
+                "rules": [
+                  {
+                    "delete_marker_replication_status": "",
+                    "destination": [
+                      {
+                        "access_control_translation": [],
+                        "account_id": "",
+                        "bucket": "arn:aws:s3:::jamal-compliance-replica-492646066628",
+                        "metrics": [],
+                        "replica_kms_key_id": "",
+                        "replication_time": [],
+                        "storage_class": "STANDARD"
+                      }
+                    ],
+                    "filter": [],
+                    "id": "GlobalBackupStream",
+                    "prefix": "",
+                    "priority": 0,
+                    "source_selection_criteria": [],
+                    "status": "Enabled"
+                  }
+                ]
+              }
+            ],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      {
+                        "kms_master_key_id": "",
+                        "sse_algorithm": "AES256"
+                      }
+                    ],
+                    "bucket_key_enabled": false
+                  }
+                ]
+              }
+            ],
+            "tags": {},
+            "tags_all": {},
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": true,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "data.aws_caller_identity.current"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
