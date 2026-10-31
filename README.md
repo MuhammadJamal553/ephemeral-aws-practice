@@ -1,613 +1,196 @@
 # ☁️ Ephemeral AWS Cloud Architecture Practice Marathon
 
-> **17 Days of Hands-On AWS + Terraform Infrastructure Engineering**
+> **20 Days of Hands-On AWS + Terraform Infrastructure Engineering**
 
-This repository documents my progressive **Build → Deploy → Test → Destroy → Repeat** AWS cloud engineering marathon.
+This repository documents my **Build → Deploy → Test → Destroy → Repeat** AWS cloud engineering marathon.
 
-The goal of this project is not simply to follow tutorials or deploy pre-built templates. It is to develop practical cloud engineering skills and genuine infrastructure muscle memory by repeatedly designing, provisioning, testing, troubleshooting, securing, and destroying AWS infrastructure using **Terraform (Infrastructure as Code)**.
+The goal is not to follow tutorials or deploy pre-built templates. It is to build real infrastructure muscle memory by repeatedly designing, provisioning, testing, troubleshooting, securing and destroying AWS infrastructure with **Terraform (Infrastructure as Code)**, while preparing for the **AWS Certified Solutions Architect – Associate (SAA-C03)** exam.
 
-Each day introduces a new AWS service, architectural concept, security practice, or infrastructure pattern while building upon concepts learned during previous days.
+Each day introduces a new AWS service, architecture pattern or security concept and builds on the days before it.
 
 ---
 
 ## 🎯 Project Objectives
 
-Through this marathon, I am practicing:
-
-- ☁️ AWS cloud architecture
+- ☁️ AWS cloud architecture (SAA-C03 aligned)
 - 🏗️ Terraform Infrastructure as Code
-- 🔐 IAM and least-privilege security
-- 🌐 Networking and global content delivery
+- 🔐 IAM, STS and least-privilege security
+- 🌐 Networking, VPC connectivity and global content delivery
 - ⚡ Serverless architecture
 - 📊 Monitoring and observability
-- 🔑 Secrets management
+- 🔑 Secrets and encryption management
 - 🗄️ SQL and NoSQL databases
-- 🚀 Auto Scaling infrastructure
+- 🚀 Auto Scaling and high availability
 - 📦 Containerized workloads
 - 📨 Event-driven and asynchronous architectures
 - 🛡️ Edge security and Web Application Firewall protection
-- ♻️ Ephemeral infrastructure and cost-conscious cloud engineering
-
-The core workflow is intentionally simple:
+- 🌎 Multi-region resilience and compliance
+- ♻️ Ephemeral infrastructure and cost-conscious engineering
 
 ```text
-Design
-   ↓
-Terraform Code
-   ↓
-terraform plan
-   ↓
-terraform apply
-   ↓
-Test / Verify
-   ↓
-Troubleshoot
-   ↓
-terraform destroy
-   ↓
-Repeat with a more advanced architecture
+Design → Terraform Code → plan → apply → Verify → Troubleshoot → destroy → Repeat
 ```
 
 ---
 
 # 🏃‍♂️ The Progressive Architectural Journey
 
-## 📁 Day 1 — Private Amazon S3 Storage
+## Phase 1: Storage, Delivery and Serverless Foundations (Days 1–6)
 
-**Architecture:** Private Amazon S3 bucket.
+| Day | Project | Architecture and concepts |
+|---|---|---|
+| 1 | `Day1-ThePrivateS3Bucket` | Private S3 bucket with strict public access blocks |
+| 2 | `Day2-CloudFront` | CloudFront CDN → private S3 origin using Origin Access Control (OAC) |
+| 3 | `Day3-LambdaAPI` | API Gateway (HTTP API) → Lambda (Python 3.12), CORS, invocation permissions |
+| 4 | `Day4-SNSAlerts` | Lambda → SNS topic, least-privilege IAM, pub/sub decoupling |
+| 5 | `Day5-FullStackConvergence` | CloudFront + S3 frontend + API Gateway + Lambda + SNS combined |
+| 6 | `Day6-DynamoDBState` | API Gateway → Lambda → DynamoDB with atomic counters |
 
-**Core Concepts:**
-- Amazon S3
-- Terraform AWS provider
-- S3 public access blocking
-- Secure object storage
-- Infrastructure creation and destruction
+## Phase 2: Automation, Observability and Identity (Days 7–10)
 
-**Focus:** Establishing a secure storage foundation while learning the Terraform resource lifecycle.
+| Day | Project | Architecture and concepts |
+|---|---|---|
+| 7 | `Day7-VariablesAutomation` | `variables.tf`, outputs, parameterized and reusable Terraform |
+| 8 | `Day8-CloudWatchAlarms` | CloudWatch alarms on Lambda failures, incident tripwires |
+| 9 | `Day9-SecretsManagement` | SSM Parameter Store with KMS-encrypted `SecureString`, no hardcoded secrets |
+| 10 | `Day10-IAMCrossAccount` | STS `AssumeRole`, trust policies, temporary credentials |
 
----
+## Phase 3: Data Tier and Global Resilience (Days 11–14)
 
-## 🌍 Day 2 — CloudFront CDN + Private S3 Origin
+| Day | Project | Architecture and concepts |
+|---|---|---|
+| 11 | `Day11-RDSPostgres` | RDS PostgreSQL, private subnet groups, security groups |
+| 12 | `Day12-ElasticCacheRedis` | ElastiCache Redis, in-memory caching, network-controlled access |
+| 13 | `Day13-GlobalRoute53` | Multi-region workload (us-east-1 + us-west-2) using Terraform provider aliases, DR simulation |
+| 14 | `Day14-EdgeSecurityWAF` | AWS WAFv2 Web ACL, IP rate limiting, CloudFront integration |
 
-**Architecture:** CloudFront → Private S3
+## Phase 4: Compute, Containers and Messaging (Days 15–18)
 
-**Core Concepts:**
-- Amazon CloudFront
-- Content Delivery Networks
-- HTTPS delivery
-- CloudFront distributions
-- Origin Access Control (OAC)
-- Private S3 origins
-- Edge locations
+| Day | Project | Architecture and concepts |
+|---|---|---|
+| 15 | `Day15-AutoScalingEC2` | EC2 Auto Scaling Group + Application Load Balancer across multiple AZs |
+| 16 | `Day16-ECSFargate` | ECS cluster, Fargate tasks, task definitions, serverless containers |
+| 17 | `Day17-SQSDeadLetterQueue` | SQS queue with redrive policy and a Dead-Letter Queue |
+| 18 | `Day18-SNSMessageFiltering` | SNS fan-out to multiple SQS queues with JSON filter policies |
 
-**Focus:** Serving content globally without exposing the underlying S3 bucket directly to the internet.
+## Phase 5: Compliance and Network Architecture (Days 19–20) 🆕
 
----
+### 🗂️ Day 19: S3 Cross-Region Replication + Object Lock
 
-## ⚡ Day 3 — Lambda + API Gateway
-
-**Architecture:**
-
-```text
-Client
-   ↓
-API Gateway
-   ↓
-AWS Lambda
-```
-
-**Core Concepts:**
-- AWS Lambda
-- Python serverless functions
-- Amazon API Gateway
-- HTTP APIs
-- Lambda invocation permissions
-- CORS
-- Terraform archive packaging
-
-**Focus:** Building a serverless backend without managing traditional servers.
-
----
-
-## 📢 Day 4 — SNS Event Notifications
-
-**Architecture:**
+**Project:** `Day19-S3ReplicationCompliance`
 
 ```text
-API Gateway
-     ↓
-   Lambda
-     ↓
-    SNS
-     ↓
-Subscribers
+Source bucket (us-east-1)  ──async replication──►  Replica bucket (us-west-2)
+   Versioning + Object Lock                           Versioning + Object Lock
+   WORM (Compliance mode)
 ```
 
-**Core Concepts:**
-- Amazon SNS
-- Publish/Subscribe architecture
-- Event-driven systems
-- IAM permissions
-- Topic ARNs
-- Least-privilege access
+**Concepts:** cross-region replication (CRR), mandatory versioning on both buckets, the replication IAM role (including Object Lock permissions), Object Lock in **Compliance** mode (WORM), provider aliases for a second region.
 
-**Focus:** Decoupling application components using asynchronous notifications.
+**Lesson:** Compliance mode locked objects cannot be deleted by anyone, including the root user, until retention expires. Plan the destroy step before uploading test objects.
 
 ---
 
-## 🌐 Day 5 — Full-Stack AWS Architecture
+### 🌐 Day 20: Transit Gateway + VPC Peering
 
-**Architecture:**
+**Project:** `Day20-TransitGatewayPeering`
 
 ```text
-User
- ↓
-CloudFront
- ↓
-Private S3 Frontend
- ↓
-API Gateway
- ↓
-Lambda
- ↓
-SNS
+      VPC-A 10.10.0.0/16 ◄──── VPC Peering ────► VPC-B 10.20.0.0/16
+              │                                        │
+              └──────────► Transit Gateway ◄───────────┘
+                                  ▲
+                                  │
+                        VPC-C 10.30.0.0/16
 ```
 
-**Services Combined:**
+**Concepts:** Transit Gateway hub-and-spoke, VPC peering, route tables, longest prefix match, SSM Session Manager access without SSH keys or NAT.
 
-`S3 + CloudFront + API Gateway + Lambda + SNS`
+**What I measured (A pinging B and C):**
 
-**Focus:** Combining previously isolated AWS services into a complete cloud-hosted application architecture.
+| Path | Route used | TTL | Latency |
+|---|---|---|---|
+| A → B | VPC peering (`10.20.0.0/16`, most specific) | 127 | about 0.4 ms |
+| A → C | Transit Gateway (`10.0.0.0/8`) | 126 | about 5 ms |
 
----
+Turning peering off with `-var="enable_peering=false"` moved A → B onto the Transit Gateway path, since the broader `10.0.0.0/8` route took over.
 
-## 🗄️ Day 6 — DynamoDB State Management
-
-**Architecture:**
-
-```text
-Client
-  ↓
-API Gateway
-  ↓
-Lambda
-  ↓
-DynamoDB
-```
-
-**Core Concepts:**
-- Amazon DynamoDB
-- Serverless persistence
-- NoSQL databases
-- Atomic counters
-- Concurrent updates
-- IAM database permissions
-
-**Focus:** Moving from stateless serverless execution to persistent application state.
-
----
-
-## ⚙️ Day 7 — Terraform Variables & Automation
-
-**Project:** `Day7-VariablesAutomation`
-
-**Core Concepts:**
-- Terraform variables
-- Configurable infrastructure
-- Reusable Terraform code
-- Infrastructure parameterization
-- Reduced hardcoding
-- Automation-friendly deployments
-
-**Focus:** Moving from static Terraform configurations toward reusable Infrastructure as Code.
-
----
-
-## 📊 Day 8 — CloudWatch Monitoring & Alarms
-
-**Project:** `Day8-CloudWatchAlarms`
-
-**Core Concepts:**
-- Amazon CloudWatch
-- Metrics
-- Monitoring
-- CloudWatch alarms
-- Operational visibility
-- Infrastructure observability
-
-**Focus:** Learning that deploying infrastructure is only part of cloud engineering — production systems must also be monitored.
-
----
-
-## 🔐 Day 9 — AWS Secrets Management
-
-**Project:** `Day9-SecretsManagement`
-
-**Core Concepts:**
-- Secure secret storage
-- Credential management
-- Avoiding hardcoded secrets
-- IAM-controlled secret access
-- Secure application configuration
-
-**Focus:** Separating sensitive credentials from application and infrastructure source code.
-
----
-
-## 🤝 Day 10 — IAM Cross-Account Access
-
-**Project:** `Day10-IAMCrossAccount`
-
-**Core Concepts:**
-- AWS IAM
-- IAM roles
-- Trust relationships
-- Cross-account access
-- AssumeRole
-- Least privilege
-- AWS security boundaries
-
-**Focus:** Understanding how AWS identities securely access resources across account boundaries.
-
----
-
-## 🐘 Day 11 — Amazon RDS PostgreSQL
-
-**Project:** `Day11-RDSPostgres`
-
-**Core Concepts:**
-- Amazon RDS
-- PostgreSQL
-- Managed relational databases
-- Database networking
-- Security groups
-- Database credentials
-- Terraform database provisioning
-
-**Focus:** Provisioning persistent relational database infrastructure using Infrastructure as Code.
-
----
-
-## ⚡ Day 12 — ElastiCache Redis
-
-**Project:** `Day12-ElasticCacheRedis`
-
-**Core Concepts:**
-- Amazon ElastiCache
-- Redis
-- In-memory caching
-- Application performance
-- Cache architecture
-- Network-controlled access
-
-**Focus:** Understanding how caching can reduce database workload and improve application response times.
-
----
-
-## 🌎 Day 13 — Route 53 Global DNS
-
-**Project:** `Day13-GlobalRoute53`
-
-**Core Concepts:**
-- Amazon Route 53
-- DNS
-- Hosted zones
-- DNS records
-- Global traffic routing
-- Cloud service integration
-
-**Focus:** Understanding how users are routed from human-readable domain names to cloud infrastructure.
-
----
-
-## 🛡️ Day 14 — AWS WAF Edge Security
-
-**Architecture:**
-
-```text
-Internet
-   ↓
-AWS WAF
-   ↓
-CloudFront
-   ↓
-Application / Origin
-```
-
-**Core Concepts:**
-- AWS WAF
-- Web ACLs
-- Edge security
-- Request filtering
-- Web application protection
-- CloudFront security integration
-
-**Focus:** Adding a dedicated security layer in front of internet-facing infrastructure.
-
----
-
-## 📈 Day 15 — EC2 Auto Scaling
-
-**Project:** `Day15-AutoScalingEC2`
-
-**Core Concepts:**
-- Amazon EC2
-- Launch templates
-- Auto Scaling Groups
-- Elastic infrastructure
-- Instance scaling
-- High availability concepts
-- Dynamic compute capacity
-
-**Focus:** Moving beyond fixed compute resources toward infrastructure capable of adapting to workload demand.
-
----
-
-## 🐳 Day 16 — Amazon ECS Fargate
-
-**Project:** `Day16-ECSFargate`
-
-**Core Concepts:**
-- Amazon ECS
-- AWS Fargate
-- Containers
-- Task definitions
-- Container orchestration
-- Serverless container compute
-- Infrastructure as Code for containers
-
-**Focus:** Running containerized workloads on AWS without directly managing the underlying EC2 servers.
-
----
-
-## 📨 Day 17 — SQS + Dead-Letter Queue
-
-**Architecture:**
-
-```text
-Producer
-   ↓
-Amazon SQS
-   ↓
-Consumer
-   │
-   ├── Success → Processed
-   │
-   └── Repeated Failure
-              ↓
-       Dead-Letter Queue
-```
-
-**Core Concepts:**
-- Amazon SQS
-- Message queues
-- Asynchronous processing
-- Application decoupling
-- Retry handling
-- Dead-Letter Queues
-- Failure isolation
-- Resilient event-driven architecture
-
-**Focus:** Designing distributed applications that can tolerate processing failures without losing problematic messages.
+**Exam takeaways:**
+- The **most specific route wins** (longest prefix match).
+- VPC peering is **non-transitive** and needs non-overlapping CIDRs.
+- Transit Gateway is transitive and scales to many VPCs, but bills per attachment-hour plus per GB.
+- Every route is a separate `aws_route` resource. Mixing inline `route {}` blocks with `aws_route` makes Terraform fight over the table.
 
 ---
 
 # 🧠 Skills Developed So Far
 
-After 17 stages, this repository covers multiple layers of AWS cloud architecture:
-
 | Area | Technologies / Concepts |
 |---|---|
-| Infrastructure as Code | Terraform |
-| Object Storage | Amazon S3 |
-| CDN / Edge | Amazon CloudFront |
-| Serverless Compute | AWS Lambda |
-| APIs | Amazon API Gateway |
-| Notifications | Amazon SNS |
-| Message Queues | Amazon SQS |
-| NoSQL Database | Amazon DynamoDB |
-| Relational Database | Amazon RDS / PostgreSQL |
-| Caching | Amazon ElastiCache / Redis |
-| DNS | Amazon Route 53 |
-| Compute | Amazon EC2 |
-| Scaling | EC2 Auto Scaling |
-| Containers | Amazon ECS / Fargate |
-| Monitoring | Amazon CloudWatch |
-| Security | IAM, OAC, AWS WAF |
-| Secrets | AWS Secrets Management |
-| Identity | IAM Cross-Account Access |
-| Architecture | Serverless, event-driven and decoupled systems |
+| Infrastructure as Code | Terraform, variables, outputs, `for_each`, `count`, provider aliases |
+| Object Storage | S3, CloudFront, OAC, Cross-Region Replication, Object Lock |
+| Serverless | Lambda, API Gateway (HTTP APIs) |
+| Messaging | SNS, SQS, DLQs, fan-out, filter policies |
+| Databases | DynamoDB, RDS PostgreSQL, ElastiCache Redis |
+| Networking | VPC, Transit Gateway, VPC peering, route tables, ALB |
+| Compute | EC2, Auto Scaling, ECS Fargate |
+| Security | IAM, STS, KMS, SSM Parameter Store, AWS WAF, security groups |
+| Monitoring | CloudWatch metrics and alarms |
+| Resilience | Multi-AZ, multi-region, retries and failure isolation |
 
 ---
 
-# 🏗️ Architecture Progression
-
-The marathon intentionally progresses from individual resources toward interconnected cloud systems.
-
-```text
-Day 1
-S3
- │
- ▼
-Day 2
-S3 + CloudFront
- │
- ▼
-Day 3
-API Gateway + Lambda
- │
- ▼
-Day 4
-Lambda + SNS
- │
- ▼
-Day 5
-Full-Stack Integration
- │
- ▼
-Day 6
-Persistent NoSQL State
- │
- ▼
-Day 7
-Reusable Terraform
- │
- ▼
-Day 8
-Monitoring & Alarms
- │
- ▼
-Day 9
-Secrets Security
- │
- ▼
-Day 10
-Cross-Account IAM
- │
- ▼
-Day 11
-Relational Databases
- │
- ▼
-Day 12
-Caching
- │
- ▼
-Day 13
-Global DNS
- │
- ▼
-Day 14
-Edge Security
- │
- ▼
-Day 15
-Auto Scaling Compute
- │
- ▼
-Day 16
-Serverless Containers
- │
- ▼
-Day 17
-Reliable Message Queues
-```
-
----
-
-# 🛠️ Global Project Control Blueprint
-
-## Prerequisites
-
-Before deploying any of the projects:
+# 🛠️ Prerequisites
 
 - AWS account
-- AWS CLI
-- Terraform CLI
+- AWS CLI, Terraform CLI and Git
 - Securely configured AWS credentials
-- Basic understanding of AWS IAM permissions
-- Git
-
-Check the installed tools:
 
 ```bash
 aws --version
 terraform --version
 git --version
-```
-
-Verify AWS authentication:
-
-```bash
 aws sts get-caller-identity
 ```
 
----
-
 # ♻️ Infrastructure Lifecycle
 
-Each project follows the same Infrastructure as Code lifecycle.
-
-### 1. Initialize Terraform
-
 ```bash
-terraform init
+terraform init       # download providers
+terraform fmt        # format
+terraform validate   # check syntax
+terraform plan       # preview changes
+terraform apply      # deploy
+# verify with the AWS CLI, browser or API calls
+terraform destroy    # tear everything down
 ```
 
-Downloads the required Terraform providers and initializes the working directory.
-
-### 2. Format the Terraform configuration
-
-```bash
-terraform fmt
-```
-
-### 3. Validate the configuration
-
-```bash
-terraform validate
-```
-
-### 4. Review the deployment
-
-```bash
-terraform plan
-```
-
-### 5. Deploy the infrastructure
-
-```bash
-terraform apply
-```
-
-### 6. Verify the AWS resources
-
-Resources are tested using the appropriate AWS service, AWS CLI, browser, API request, or application workflow.
-
-### 7. Destroy the infrastructure
-
-```bash
-terraform destroy
-```
-
-Destroying resources after each exercise is an intentional part of the project.
-
-It reinforces the concept that infrastructure should be **reproducible and disposable**, while also helping control AWS costs during experimentation.
+Destroying resources after each lab is intentional. It proves the infrastructure is **reproducible and disposable** and keeps costs under control.
 
 ---
 
 # 🔐 Security Principles Practiced
 
-Security is incorporated throughout the marathon rather than treated as a separate topic.
-
-Key principles include:
-
-- **Principle of Least Privilege**
+- Least-privilege, resource-specific IAM policies
 - Private-by-default infrastructure
-- IAM role-based permissions
-- Resource-specific IAM policies
-- S3 public access blocking
-- CloudFront Origin Access Control
-- HTTPS-based delivery
-- Secure secrets management
-- Cross-account trust relationships
-- AWS WAF edge protection
-- Security group controlled access
-- Failure isolation through queues and DLQs
+- Temporary credentials with STS `AssumeRole`
+- S3 public access blocking and CloudFront OAC
+- Encrypted secrets (KMS `SecureString`), no hardcoded credentials
+- AWS WAF edge protection with rate limiting
+- Security-group-controlled access
+- WORM data retention with Object Lock
+- Keyless server access with SSM Session Manager
+- **Repository hygiene:** `.gitignore` excludes state files, `.terraform/` folders, `.tfvars`, zip packages and temp files, so no account details or secrets are committed
 
 ---
 
 # 💰 Cost Awareness
 
-This is an **ephemeral infrastructure practice repository**.
+Some resources bill by the hour even when idle, for example **Transit Gateway attachments, NAT Gateways, RDS, ElastiCache and load balancers**. Always:
 
-Resources are created for learning and testing and should be destroyed when they are no longer required.
-
-```bash
-terraform destroy
-```
-
-> **Important:** Some AWS resources may incur charges while running. Always inspect the Terraform plan, understand AWS pricing, verify successful destruction, and check the AWS console for resources that may remain after an exercise.
+1. Read the `terraform plan` before applying.
+2. Run `terraform destroy` when the lab ends.
+3. Check the AWS console for leftovers.
 
 ---
 
@@ -633,6 +216,9 @@ ephemeral-aws-practice/
 ├── Day15-AutoScalingEC2/
 ├── Day16-ECSFargate/
 ├── Day17-SQSDeadLetterQueue/
+├── Day18-SNSMessageFiltering/
+├── Day19-S3ReplicationCompliance/
+├── Day20-TransitGatewayPeering/
 │
 ├── .gitignore
 └── README.md
@@ -645,46 +231,31 @@ ephemeral-aws-practice/
 ```text
 AWS + Terraform Practice Marathon
 
-█████████████████  17 Architecture Challenges Completed
+████████████████████  20 Architecture Challenges Completed
 ```
 
-**Current milestone:** Day 17 ✅
-
-The repository has progressed from deploying a single private S3 bucket to working with:
-
-**serverless applications, databases, caching, DNS, monitoring, IAM security, WAF protection, Auto Scaling, containers, queues, and failure-handling architectures.**
+**Current milestone:** Day 20 ✅
 
 ---
 
 # 🚀 What This Repository Represents
 
-This repository is not intended to represent a single production application.
+A **cloud engineering laboratory**, not a single production app. It documents a progression through increasingly complex AWS architectures:
 
-Instead, it is a **cloud engineering laboratory** documenting my progression through increasingly complex AWS architectures.
+> **Build it → break and debug it → understand it → destroy it → rebuild something more advanced.**
 
-The emphasis is on learning by repeatedly:
-
-> **Building it → breaking/debugging it → understanding it → destroying it → rebuilding something more advanced.**
-
-The long-term objective is to strengthen practical skills in:
-
-**Cloud Engineering • DevOps • Infrastructure as Code • AWS Security • Automation • System Architecture**
+**Long-term focus:** Cloud Engineering • DevOps • Infrastructure as Code • AWS Security • Automation • System Architecture
 
 ---
 
 ## 👨‍💻 Author
 
 **Muhammad Jamal Khan**
-
-BS Computer Science  
-Cloud / DevOps / Cybersecurity Learner
-
+BS Computer Science | Cloud / DevOps / Cybersecurity Learner
 GitHub: **MuhammadJamal553**
 
 ---
 
 ## ⭐ Project Status
 
-🟢 **Active — More AWS architecture challenges are being added as the marathon continues.**
-
-If you find this learning journey useful, feel free to explore the individual day folders and follow the repository as the architecture progresses.
+🟢 **Active:** more AWS architecture challenges are being added as the marathon continues.
