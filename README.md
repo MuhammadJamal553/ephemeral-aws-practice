@@ -1,6 +1,6 @@
 # ☁️ Ephemeral AWS Cloud Architecture Practice Marathon
 
-> **20 Days of Hands-On AWS + Terraform Infrastructure Engineering**
+> **22 Days of Hands-On AWS + Terraform Infrastructure Engineering**
 
 This repository documents my **Build → Deploy → Test → Destroy → Repeat** AWS cloud engineering marathon.
 
@@ -73,7 +73,7 @@ Design → Terraform Code → plan → apply → Verify → Troubleshoot → des
 | 17 | `Day17-SQSDeadLetterQueue` | SQS queue with redrive policy and a Dead-Letter Queue |
 | 18 | `Day18-SNSMessageFiltering` | SNS fan-out to multiple SQS queues with JSON filter policies |
 
-## Phase 5: Compliance and Network Architecture (Days 19–20) 🆕
+## Phase 5: Compliance, Networking and DNS (Days 19–22) 🆕
 
 ### 🗂️ Day 19: S3 Cross-Region Replication + Object Lock
 
@@ -123,6 +123,41 @@ Turning peering off with `-var="enable_peering=false"` moved A → B onto the Tr
 
 ---
 
+### 🔒 Day 21: VPC Endpoints (Private Connectivity)
+
+**Project:** `Day21-VPCEndpointsPrivateLink`
+
+```text
+   Private subnet (no IGW, no NAT, no public IP)
+   ┌──────────────────────────────────────┐
+   │  EC2 ──► S3 Gateway Endpoint ────────┼──► S3 bucket
+   │   └────► SSM Interface Endpoints ────┼──► Systems Manager
+   └──────────────────────────────────────┘
+```
+
+**Concepts:** gateway endpoint (S3, DynamoDB) vs interface endpoint (PrivateLink), private DNS, `aws:SourceVpce` bucket-policy condition, managing a server with SSM and no internet.
+
+**What I verified:**
+- From inside the private server, a request to the internet failed (`NO_INTERNET_AS_EXPECTED`).
+- The same server read an S3 object through the gateway endpoint.
+- The route table had only the `local` route and an S3 prefix-list route to the endpoint, with no `0.0.0.0/0` route.
+
+**Troubleshooting lesson:** the SSM agent stayed offline because the interface endpoints did not exist in AWS yet. Re-applying and rebooting the instance fixed it. The agent retries slowly, so a reboot after the endpoints become `available` is the fast fix.
+
+**Exam takeaway:** "reach AWS services without the internet" means a **VPC endpoint**, not a NAT gateway.
+
+---
+
+### 🌐 Day 22: Route 53 Private Hosted Zone and Weighted Routing
+
+**Project:** `Day22-Route53PrivateDNS`
+
+**Concepts:** private hosted zones (the VPC needs DNS support and hostnames enabled), weighted records for blue/green traffic shifting, routing policy types, alias vs CNAME.
+
+**Status:** deployed and destroyed within the same session. I stopped before running the verification tests, because Route 53 is **not free-tier eligible** (only hosted zones deleted within 12 hours are not charged). The code is kept as a reference.
+
+---
+
 # 🧠 Skills Developed So Far
 
 | Area | Technologies / Concepts |
@@ -132,7 +167,7 @@ Turning peering off with `-var="enable_peering=false"` moved A → B onto the Tr
 | Serverless | Lambda, API Gateway (HTTP APIs) |
 | Messaging | SNS, SQS, DLQs, fan-out, filter policies |
 | Databases | DynamoDB, RDS PostgreSQL, ElastiCache Redis |
-| Networking | VPC, Transit Gateway, VPC peering, route tables, ALB |
+| Networking | VPC, Transit Gateway, VPC peering, VPC endpoints, route tables, ALB, Route 53 private zones |
 | Compute | EC2, Auto Scaling, ECS Fargate |
 | Security | IAM, STS, KMS, SSM Parameter Store, AWS WAF, security groups |
 | Monitoring | CloudWatch metrics and alarms |
@@ -186,11 +221,15 @@ Destroying resources after each lab is intentional. It proves the infrastructure
 
 # 💰 Cost Awareness
 
-Some resources bill by the hour even when idle, for example **Transit Gateway attachments, NAT Gateways, RDS, ElastiCache and load balancers**. Always:
+Some resources bill by the hour even when idle, for example **Transit Gateway attachments, interface VPC endpoints, NAT Gateways, RDS, ElastiCache and load balancers**. Always:
 
 1. Read the `terraform plan` before applying.
 2. Run `terraform destroy` when the lab ends.
 3. Check the AWS console for leftovers.
+
+### Free-tier-only mode
+
+My AWS free account is close to expiring, so from Day 23 onward every lab uses **only free-tier eligible services with no hourly cost** (for example Lambda, DynamoDB, Step Functions, S3 and CloudWatch within their free allowances). Days 20 to 22 used a small amount of promotional credit and were destroyed immediately after use.
 
 ---
 
@@ -219,6 +258,8 @@ ephemeral-aws-practice/
 ├── Day18-SNSMessageFiltering/
 ├── Day19-S3ReplicationCompliance/
 ├── Day20-TransitGatewayPeering/
+├── Day21-VPCEndpointsPrivateLink/
+├── Day22-Route53PrivateDNS/
 │
 ├── .gitignore
 └── README.md
@@ -231,10 +272,10 @@ ephemeral-aws-practice/
 ```text
 AWS + Terraform Practice Marathon
 
-████████████████████  20 Architecture Challenges Completed
+██████████████████████  22 Architecture Challenges Completed
 ```
 
-**Current milestone:** Day 20 ✅
+**Current milestone:** Day 22 ✅
 
 ---
 
