@@ -14,7 +14,7 @@ variable "vpc_cidr" {
     default = "10.50.0.0/16"
 }
 
-
+# Experiment switch: when true, the bucket refuses reads that do not come through the endpoint
 variable "lock_bucket_to_endpoint" {
     type    = bool
     default = false
